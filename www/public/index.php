@@ -158,7 +158,7 @@ $router = $app->getRouter();
 // Ici, il génère le token CSRF si nécessaire et le vérifie pour POST/PUT/DELETE
 // CONCEPT : CSRF Protection (Cross-Site Request Forgery)
 // Protection contre les attaques où un site malveillant fait des requêtes en votre nom
-$router->addMiddleware(new CsrfMiddleware());
+ //! $router->addMiddleware(new CsrfMiddleware());
 
 // ============================================
 // ÉTAPE 8 : CONFIGURATION DU SYSTÈME D'ÉVÉNEMENTS
