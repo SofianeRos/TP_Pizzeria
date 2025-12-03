@@ -176,7 +176,11 @@ EventListenerService::register($events, $logger);
 // CONCEPT PÉDAGOGIQUE : Route Attributes (PHP 8)
 // Les routes sont définies directement dans les contrôleurs avec des attributs #[Route]
 // Le router scanne les contrôleurs et enregistre automatiquement les routes
-$router->registerRoutes(HomeController::class);
+// ✅ CE QUE TU DOIS AVOIR (Correct)
+// On enregistre chaque contrôleur une seule fois
+$router->registerRoutes(App\Controller\HomeController::class);
+$router->registerRoutes(App\Controller\MenuController::class);
+$router->registerRoutes(App\Controller\AdminPizzaController::class);
 
 // Démarrer l'application
 $app->start();
