@@ -8,14 +8,78 @@ use JulienLinard\Doctrine\Mapping\Entity;
 use JulienLinard\Doctrine\Mapping\Id;
 use JulienLinard\Doctrine\Mapping\ManyToOne;
 
-
 #[Entity(table: 'users')]
 class User
 {
     #[Id]
     #[Column(type: 'int')]
-    
     private ?int $id = null;
+
+
+    #[Column(type: 'string')]
+    private string $firstname = '';
+
+
+    #[Column(type: 'string')]
+    private string $lastname = '';
+
+    
+
+    #[Column(type: 'string')]
+    private ?string $phone = null;
+
+    #[Column(type: 'string')]
+    private ?string $address = null;
+
+    #[Column(type: 'string')]
+    private ?string $zipcode = null;
+
+    #[Column(type: 'string')]
+    private ?string $city = null;
+
+    
+
+    // --- Ajoute les Getters et Setters tout en bas ---
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
+    }
+    public function setZipcode(?string $zipcode): self
+    {
+        $this->zipcode = $zipcode;
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+        return $this;
+    }
 
     #[Column(type: 'string')]
     private string $email;
@@ -28,10 +92,29 @@ class User
 
     // --- Getters et Setters ---
 
-    // ✅ ET ICI
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+        return $this;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+        return $this;
     }
 
     public function getEmail(): string

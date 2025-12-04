@@ -13,7 +13,7 @@ class PizzaPrice
 {
     #[Id]
     #[Column(type: 'int')]
-    private int $id;
+    private ?int $id = null;
 
     #[Column(name: 'pizza_id', type: 'int')]
     private int $pizzaId;
@@ -21,11 +21,10 @@ class PizzaPrice
     #[Column(name: 'size_id', type: 'int')]
     private int $sizeId;
 
-    #[Column(type: 'string')] // String pour éviter les problèmes de virgule flottante
+    #[Column(type: 'string')]
     private string $price;
 
-    // --- Getters ---
-    public function getId(): int { return $this->id; }
+    public function getId(): ?int { return $this->id; }
     
     public function getPizzaId(): int { return $this->pizzaId; }
     public function setPizzaId(int $pizzaId): self { $this->pizzaId = $pizzaId; return $this; }
