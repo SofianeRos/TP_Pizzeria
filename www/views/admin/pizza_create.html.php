@@ -1,5 +1,5 @@
 <?php
-// IMPORTANT : On importe la classe Session pour pouvoir l'utiliser dans la vue
+
 use JulienLinard\Core\Session\Session;
 ?>
 

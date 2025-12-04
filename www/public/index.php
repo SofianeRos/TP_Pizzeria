@@ -135,6 +135,13 @@ $container->singleton(CoreValidator::class, function() use ($container) {
     return $coreValidator;
 });
 
+// Enregistrer le CartService
+$container->singleton(\App\Service\CartService::class, function() use ($container) {
+    return new \App\Service\CartService(
+        $container->make(EntityManager::class)
+    );
+});
+
 // Enregistrer FileUploadService comme singleton (si la classe existe)
 // CONCEPT : Service d'upload de fichiers avec validation intégrée
 // Note : Ce service doit être créé dans src/Service/FileUploadService.php si nécessaire
@@ -181,6 +188,7 @@ EventListenerService::register($events, $logger);
 $router->registerRoutes(App\Controller\HomeController::class);
 $router->registerRoutes(App\Controller\MenuController::class);
 $router->registerRoutes(App\Controller\AdminPizzaController::class);
+$router->registerRoutes(App\Controller\AuthController::class); 
 
 // Démarrer l'application
 $app->start();
