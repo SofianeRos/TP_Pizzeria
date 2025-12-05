@@ -56,7 +56,7 @@ class CheckoutController extends Controller
         }
 
         // 4. Envoi à la vue
-        // 👇 CHANGEMENT IMPORTANT : On nomme la variable 'customer' pour éviter les conflits
+    
         return $this->view('checkout/index', [
             'title' => 'Livraison',
             'customer' => $userObject, // On passe l'OBJET chargé

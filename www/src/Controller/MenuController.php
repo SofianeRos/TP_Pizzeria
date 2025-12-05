@@ -51,7 +51,7 @@ class MenuController extends Controller
         // 2. On récupère tous les tarifs pour cette pizza
         $pizzaPrices = $this->entityManager->getRepository(PizzaPrice::class)->findBy(['pizza_id' => $id]);
         
-        // 3. On construit un tableau propre pour la vue : [Taille + Prix]
+        // 3. On construit un tableau propre pour la vue 
         $options = [];
         foreach ($pizzaPrices as $priceEntity) {
             $size = $this->entityManager->getRepository(Size::class)->find($priceEntity->getSizeId());
@@ -59,8 +59,8 @@ class MenuController extends Controller
             if ($size) {
                 $options[] = [
                     'size_id' => $size->getId(),
-                    'label' => $size->getLabel(), // ex: "Senior"
-                    'price' => $priceEntity->getPrice() // ex: 12.50
+                    'label' => $size->getLabel(), 
+                    'price' => $priceEntity->getPrice() 
                 ];
             }
         }

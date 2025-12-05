@@ -58,7 +58,7 @@ class CartController extends Controller
 
     /**
      * Supprime une ligne du panier
-     * URL exemple : /panier/remove/1/2 (Supprimer Pizza 1 Taille 2)
+     * 
      */
     #[Route(path: '/panier/remove/{pizzaId}/{sizeId}', methods: ['GET'], name: 'cart_remove')]
     public function remove(int $pizzaId, int $sizeId): Response

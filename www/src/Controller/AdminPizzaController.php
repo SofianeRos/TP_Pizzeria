@@ -10,7 +10,7 @@ use JulienLinard\Router\Response;
 use JulienLinard\Core\Session\Session;
 use App\Entity\Pizza;
 use App\Entity\PizzaPrice;
-use App\Entity\Size; // IMPORTANT : On importe l'entité Size
+use App\Entity\Size; 
 use JulienLinard\Doctrine\EntityManager;
 use App\Service\FileUploadService;
 
