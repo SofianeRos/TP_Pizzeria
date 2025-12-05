@@ -5,84 +5,73 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use JulienLinard\Core\Controller\Controller;
-
 use JulienLinard\Router\Attributes\Route;
-
 use JulienLinard\Router\Response;
-
 use App\Entity\Pizza;
-
+use App\Entity\PizzaPrice;
+use App\Entity\Size;
 use JulienLinard\Doctrine\EntityManager;
 
 class MenuController extends Controller
-
 {
-
-    // On déclare une propriété pour stocker l'EntityManager
-
     private EntityManager $entityManager;
 
-    /**
-
-     * Constructeur : On demande l'EntityManager ici.
-
-     * Le framework va l'injecter automatiquement (Autowiring).
-
-     */
-
     public function __construct(EntityManager $entityManager)
-
     {
-
         $this->entityManager = $entityManager;
-
     }
 
+    /**
+     * Liste des pizzas (La Carte)
+     */
     #[Route(path: '/carte', methods: ['GET'], name: 'menu_list')]
-
     public function index(): Response
-
     {
-
-        // On utilise $this->entityManager directement
-
-        // Plus besoin de getContainer() !
-
         $pizzas = $this->entityManager->getRepository(Pizza::class)->findAll();
 
         return $this->view('pizzas/index', [
-
             'title' => 'Notre Carte',
-
             'pizzas' => $pizzas
-
         ]);
-
     }
-
+    
+    /**
+     * Détail d'une pizza (Page avec le formulaire d'achat)
+     */
     #[Route(path: '/carte/{id}', methods: ['GET'], name: 'menu_show')]
-
     public function show(int $id): Response
-
     {
-
-        // Idem ici, on réutilise la propriété
-
+        // 1. On récupère la pizza
         $pizza = $this->entityManager->getRepository(Pizza::class)->find($id);
 
         if (!$pizza) {
-
             return $this->redirect('/carte');
-
         }
 
+        // 2. On récupère tous les tarifs pour cette pizza
+        $pizzaPrices = $this->entityManager->getRepository(PizzaPrice::class)->findBy(['pizza_id' => $id]);
+        
+        // 3. On construit un tableau propre pour la vue : [Taille + Prix]
+        $options = [];
+        foreach ($pizzaPrices as $priceEntity) {
+            $size = $this->entityManager->getRepository(Size::class)->find($priceEntity->getSizeId());
+            
+            if ($size) {
+                $options[] = [
+                    'size_id' => $size->getId(),
+                    'label' => $size->getLabel(), // ex: "Senior"
+                    'price' => $priceEntity->getPrice() // ex: 12.50
+                ];
+            }
+        }
+        
+        // On trie du moins cher au plus cher
+        usort($options, fn($a, $b) => $a['price'] <=> $b['price']);
+
         return $this->view('pizzas/show', [
-
-            'pizza' => $pizza
-
+            'title' => $pizza->getName(),
+            'pizza' => $pizza,
+            'options' => $options
         ]);
-
     }
-
 }
- 

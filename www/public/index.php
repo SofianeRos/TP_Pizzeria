@@ -190,6 +190,9 @@ $router->registerRoutes(App\Controller\MenuController::class);
 $router->registerRoutes(App\Controller\AdminPizzaController::class);
 $router->registerRoutes(App\Controller\AuthController::class); 
 $router->registerRoutes(App\Controller\CartController::class);
+$router->registerRoutes(App\Controller\CheckoutController::class);
+$router->registerRoutes(App\Controller\OrderController::class);
+$router->registerRoutes(App\Controller\AdminOrderController::class);
 
 // Démarrer l'application
 $app->start();
