@@ -1,58 +1,70 @@
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8 text-gray-800">📜 Mes Commandes</h1>
+<?php
+use JulienLinard\Core\Session\Session;
+// Fonction helper pour colorer les statuts 
+function getStatusBadge($status) {
+    switch ($status) {
+        case 'EN_ATTENTE':
+            return '<span class="bg-yellow-100 text-yellow-800 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide">🕒 En attente</span>';
+        case 'EN_PREPARATION':
+            return '<span class="bg-orange-100 text-orange-800 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide">🔥 Au four</span>';
+        case 'EN_LIVRAISON':
+             return '<span class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide">🛵 En route</span>';
+        case 'LIVRE':
+            return '<span class="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide">✅ Livré</span>';
+        default:
+            return '<span class="bg-gray-100 text-gray-800 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-wide">' . $status . '</span>';
+    }
+}
+?>
+
+<div class="container mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4 font-logo">Mes Commandes <span class="text-orange-600">Passées</span></h1>
+        <div class="w-24 h-1.5 bg-orange-500 mx-auto rounded-full"></div>
+        <p class="text-gray-500 mt-4">Retrouvez l'historique de vos dégustations.</p>
+    </div>
 
     <?php if (empty($orders)): ?>
-        <div class="bg-white rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 text-lg mb-4">Vous n'avez pas encore passé de commande.</p>
-            <a href="/carte" class="text-blue-600 hover:underline">Consulter la carte</a>
+        <div class="bg-white rounded-3xl shadow-lg p-16 text-center border border-orange-100 max-w-2xl mx-auto">
+            <div class="text-6xl mb-6">📜</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Aucune commande pour le moment.</h2>
+            <p class="text-gray-500 mb-8">C'est le moment de craquer pour une pizza !</p>
+            <a href="/carte" class="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl hover:bg-orange-700 transition shadow-md font-bold">
+                Voir la carte
+            </a>
         </div>
     <?php else: ?>
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="w-full">
-                <thead class="bg-gray-50 border-b">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N°</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Statut</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    <?php foreach ($orders as $order): ?>
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                            #<?= $order->getId() ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <?= date('d/m/Y H:i', strtotime($order->getCreatedAt())) ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <?php 
-                                $statusColors = [
-                                    'EN_PREPARATION' => 'bg-yellow-100 text-yellow-800',
-                                    'EN_LIVRAISON' => 'bg-blue-100 text-blue-800',
-                                    'LIVREE' => 'bg-green-100 text-green-800',
-                                    'ANNULEE' => 'bg-red-100 text-red-800',
-                                ];
-                                $class = $statusColors[$order->getStatus()] ?? 'bg-gray-100 text-gray-800';
-                            ?>
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $class ?>">
-                                <?= str_replace('_', ' ', $order->getStatus()) ?>
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900">
-                            <?= number_format($order->getTotalPrice(), 2) ?> €
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                            <a href="/mes-commandes/<?= $order->getId() ?>" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded hover:bg-blue-100 transition">
-                                Voir détails
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-orange-100">
+            <div class="overflow-x-auto">
+                <table class="w-full whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-orange-50 text-orange-900 text-left font-bold uppercase text-sm tracking-wider border-b border-orange-100">
+                            <th class="px-6 py-4">N° Commande</th>
+                            <th class="px-6 py-4">Date</th>
+                            <th class="px-6 py-4">Total</th>
+                            <th class="px-6 py-4 text-center">Statut</th>
+                            </tr>
+                    </thead>
+                    <tbody class="divide-y divide-orange-50">
+                        <?php foreach ($orders as $order): ?>
+                            <tr class="hover:bg-orange-50/50 transition-colors">
+                                <td class="px-6 py-6 font-bold text-gray-700">
+                                    #<?= str_pad($order->getId(), 6, '0', STR_PAD_LEFT) ?>
+                                </td>
+                                <td class="px-6 py-6 text-gray-600">
+                                    <?= date('d/m/Y à H:i', strtotime($order->getCreatedAt())) ?>
+                                </td>
+                                <td class="px-6 py-6 font-bold text-orange-600 text-lg">
+                                    <?= number_format($order->getTotalPrice(), 2) ?> €
+                                </td>
+                                <td class="px-6 py-6 text-center">
+                                    <?= getStatusBadge($order->getStatus()) ?>
+                                </td>
+                                </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     <?php endif; ?>
 </div>

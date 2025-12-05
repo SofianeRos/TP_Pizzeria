@@ -50,12 +50,11 @@ class AuthController extends Controller
             return $this->redirect('/register');
         }
 
-        // Regex Mot de passe (Tous caractères acceptés, min 8, 1 lettre, 1 chiffre)
-        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d).{8,}$/', $password)) {
-            Session::flash('error', 'Le mot de passe doit faire 8 caractères min avec 1 lettre et 1 chiffre.');
+        // Au moins 8 chars, 1 Lettre, 1 Chiffre, 1 Spécial
+        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
+            Session::flash('error', 'Le mot de passe doit faire 8 caractères min avec 1 lettre, 1 chiffre et 1 caractère spécial.');
             return $this->redirect('/register');
         }
-
         if ($password !== $passwordConfirm) {
             Session::flash('error', 'Les mots de passe ne correspondent pas');
             return $this->redirect('/register');
@@ -70,12 +69,12 @@ class AuthController extends Controller
 
         // Création de l'utilisateur
         $user = new User();
-        
+
         // 👇 2. Enregistrement des données dans l'objet (Indispensable !)
-        $user->setFirstname($firstname); 
+        $user->setFirstname($firstname);
         $user->setLastname($lastname);
         // 👆 Si ces deux lignes manquent, le nom sera vide en base de données
-        
+
         $user->setEmail($email);
         $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
         $user->setRole('CLIENT');
@@ -87,7 +86,7 @@ class AuthController extends Controller
         Session::flash('success', 'Compte créé ! Bienvenue ' . $firstname);
         return $this->redirect('/login');
     }
-    
+
     /**
      * Affiche le formulaire de connexion
      */
@@ -125,7 +124,7 @@ class AuthController extends Controller
         ]);
 
         Session::flash('success', "Ravi de vous revoir " . $user->getFirstname() . " !");
-        
+
         if ($user->getRole() === 'GERANT') {
             return $this->redirect('/admin/pizzas/create');
         }
