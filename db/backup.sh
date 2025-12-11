@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-set -euo pipefail
+
 
 if [ -z "${MYSQL_DATABASE:-}" ]; then
   echo "Erreur : La variable d'environnement MYSQL_DATABASE n'est pas définie." >&2

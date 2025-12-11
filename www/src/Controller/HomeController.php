@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index(): Response
     {
         return $this->view('home/index', [
-            'title' => 'Welcome',
+            'title' => 'Le Roi Des Pizza',
             'message' => 'Hello World!'
         ]);
     }
